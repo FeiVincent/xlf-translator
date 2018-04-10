@@ -1,0 +1,27 @@
+/* .file-lbl1 {
+    position:fixed;
+    right: 280px;
+    top: 50px;
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+    color: #5677fc;
+}
+.file-lbl2 {
+    position:fixed;
+    right: 100px;
+    top: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #5677fc;
+} */
+.progress {
+    position: relative;
+    bottom: -50px;
+    /*left: 45%; */
+}
+
+.button {
+    display: flex;
+    justify-content: space-between;
+}

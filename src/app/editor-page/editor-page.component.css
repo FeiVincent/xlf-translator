@@ -1,0 +1,17 @@
+.edite-page {
+    position:fixed;
+    top: 100px;
+    left: 520px;
+    right: 8px;
+    max-height: 800px;
+}
+
+.title {
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.matInput-full-width {
+    width: 100%;
+}

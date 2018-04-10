@@ -1,0 +1,30 @@
+.file-lbl {
+    position:fixed;
+    right: 30px;
+    top: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #5677fc;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    /* min-width: 400px; */
+    width: 500px;
+  }
+  
+  .example-header {
+    min-height: 64px;
+    padding: 8px 24px 0px;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .mat-table {
+    overflow: auto;
+    max-height: 800px;
+  }

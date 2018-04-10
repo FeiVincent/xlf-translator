@@ -1,0 +1,28 @@
+
+<div class="section">
+<h3 mat-dialog-title>Merge xlf File</h3>
+<button class="sourceFile-btn"
+            mat-raised-button
+            color="primary"
+            (click)="showOpenDialog()" >Open Source File</button>
+<p class="file-lbl1" >{{sourceFile}}</p>
+<button class="destFile-btn"
+            mat-raised-button
+            color="primary"
+            (click)="showOpenDialog()" >Open Dest File</button>
+<p class="file-lbl2" >{{destFile}}</p>
+</div>
+<div class="section button" mat-dialog-actions>
+    <button class="backMenu-btn"
+            mat-raised-button
+            color="primary"
+            (click)="onNoClick()" >Back Menu</button>
+    <button class="merge-btn"
+            mat-raised-button
+            color="accent"
+            (click)="mergeFile()" >Merge File</button>
+</div>
+<div class="section">
+        <mat-progress-bar class="progress" mode="indeterminate"
+        *ngIf="isLoading"></mat-progress-bar>
+</div>
