@@ -1,6 +1,9 @@
+import { Observable } from 'rxjs/Observable';
+import { FileOperatorService } from './../core/file-operator.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {MatTableDataSource} from '@angular/material';
+import { TranslationUnit } from './../model';
 
 @Component({
   selector: 'app-translator-page',
@@ -10,50 +13,86 @@ import {MatTableDataSource} from '@angular/material';
 export class TranslatorPageComponent implements OnInit {
 
   filename = 'message.xlf';
+
   counts = 100;
   noTransItemsCount = 0;
   doneItemCount = 0;
+
   displayedColumns = ['id', 'source', 'target', 'done', 'edit'];
-  translationList = [{id: 0, source: 'good', target: '好', done: false},
-                     {id: 1, source: 'good', target: '好', done: true},
-                     {id: 2, source: 'good', target: '好', done: false},
-                     {id: 3, source: 'good', target: '好', done: true},
-                     {id: 4, source: 'good', target: '好', done: true},
-                     {id: 5, source: 'good', target: '好', done: true},
-                     {id: 6, source: 'good', target: '好', done: true},
-                     {id: 7, source: 'good', target: '好', done: true},
-                     {id: 8, source: 'good', target: '好', done: true},
-                     {id: 9, source: 'good', target: '好', done: true},
-                     {id: 10, source: 'good', target: '好', done: true},
-                     {id: 11, source: 'good', target: '好', done: true},
-                     {id: 12, source: 'good', target: '好', done: true},
-                     {id: 13, source: 'good', target: '好', done: true},
-                     {id: 14, source: 'good', target: '好', done: true},
-                     {id: 15, source: 'good', target: '好', done: true},
-                     {id: 16, source: 'good', target: '好', done: true},
-                     {id: 17, source: 'good', target: '好', done: true},
-                     {id: 18, source: 'good', target: '好', done: true},
-                     {id: 19, source: 'good', target: '好', done: true},
-                     {id: 20, source: 'good', target: '好', done: true},
-                     {id: 21, source: 'good', target: '好', done: true},
-                     {id: 22, source: 'good', target: '好', done: true},
-                     {id: 23, source: 'good', target: '好', done: true}];
-  dataSource = new MatTableDataSource(this.translationList);
-  constructor(private route: Router) { }
+  translationList: Observable<any[]>;
+  transUnits: any[] = [];  // 存储xml转换json后的原有数据格式
+  listItems: any[] = [];   // 指定的json格式数据
+  dataSource: MatTableDataSource<any>; // listview数据数组
+  editorPageData: TranslationUnit;
+  constructor(private route: Router,
+              private fileService: FileOperatorService) { }
 
   ngOnInit() {
+    this.editorPageData = {
+      index: 0,
+      id: '',
+      meaning: '',
+      description: '',
+      source: '',
+      target: ''
+    };
   }
 
   showOpenDialog() {
-
+    this.fileService.openFileDialog()
+        .asObservable()
+        .subscribe( (filePath) => {
+            this.fileService.readFile(filePath)
+                .subscribe( (res) => {
+                    console.log(res);
+                    // 获取翻译单元数据
+                    this.transUnits = this.fileService.getTransUnits(res);
+                    this.listItems = this.dataFormat(this.transUnits);
+                    this.dataSource = new MatTableDataSource(this.listItems);
+                  },
+                  (err) => {
+                    console.log(err);
+                  }
+                );
+        });
   }
 
   saveFile() {
 
   }
 
-  editeWord(id: number): void {
-    console.log(id);
+  private dataFormat(data: any[]) {
+    const items: any[] = [];
+    this.counts = data.length;
+    let done = false;
+    for ( let i = 0; i < this.counts; ++i) {
+      if (null === data[i].target[0] || '' === data[i].target[0] ) {
+        done = false;
+        this.noTransItemsCount++;
+      }
+      done = true;
+      items.push({
+        index: i,
+        id: data[i].$.id,
+        meaning: '',
+        description: '',
+        source: data[i].source[0],
+        target: done ? data[i].target[0] : '',
+        done: done
+      });
+    }
+    return items;
+  }
+  editeWord(index: number): void {
+    const data = {
+      index: index,
+      id: this.listItems[index].id,
+      meaning: this.listItems[index].meaning,
+      description: this.listItems[index].description,
+      source: this.listItems[index].source,
+      target: this.listItems[index].target
+    };
+    this.editorPageData = data;
     // TODO: 找到指定id数据，然后通过output或者subject发送到editor界面，订阅的方式
   }
   back(): void {

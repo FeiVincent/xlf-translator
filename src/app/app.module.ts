@@ -11,6 +11,8 @@ import { TranslatorPageComponent } from './translator-page/translator-page.compo
 import { HomeComponent } from './home/home.component';
 import { MergePageComponent } from './merge-page/merge-page.component';
 import { EditorPageComponent } from './editor-page/editor-page.component';
+import { NgxElectronModule } from 'ngx-electron';
+import { FileOperatorService } from './core/file-operator.service';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { EditorPageComponent } from './editor-page/editor-page.component';
     BrowserModule,
     CommonModule,
     BrowserAnimationsModule,
+    NgxElectronModule,
     ReactiveFormsModule,
     AppRoutingModule,
     CdkTableModule,
@@ -31,6 +34,7 @@ import { EditorPageComponent } from './editor-page/editor-page.component';
   ],
   entryComponents: [MergePageComponent],
   providers: [
+    FileOperatorService
   ],
   bootstrap: [AppComponent]
 })

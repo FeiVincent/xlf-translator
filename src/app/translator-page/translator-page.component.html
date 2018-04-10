@@ -26,7 +26,7 @@
     <ng-container matColumnDef="edit">
       <mat-header-cell *matHeaderCellDef> edit </mat-header-cell>
       <mat-cell *matCellDef="let element">
-          <button mat-icon-button (click)="editeWord(element.id)" >
+          <button mat-icon-button (click)="editeWord(element.index)" >
               <mat-icon>create</mat-icon>
           </button>
         </mat-cell>
@@ -34,7 +34,7 @@
     <!-- id Column -->
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.index}} </mat-cell>
     </ng-container>
 
     <!-- source Column -->
@@ -59,5 +59,5 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
 </div>
-<app-editor-page></app-editor-page>
+<app-editor-page [transInfo]="editorPageData"></app-editor-page>
 

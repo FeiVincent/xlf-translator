@@ -5,10 +5,10 @@
     <mat-card-content>
       <mat-divider></mat-divider>
       <br>
-      <p class="title">Id: <span>{{id}}</span></p>
-      <p class="title">Meaning: <span>{{meaning}}</span></p>
-      <p class="title">Description: <span>{{description}}</span></p>
-      <p class="title">Source: <span>{{source}}</span></p>
+      <p class="title">Id: <span>{{transInfo.id}}</span></p>
+      <p class="title">Meaning: <span>{{transInfo.meaning}}</span></p>
+      <p class="title">Description: <span>{{transInfo.description}}</span></p>
+      <p class="title">Source: <span>{{transInfo.source}}</span></p>
       <p class="title">Target: </p>
       <mat-form-field class="matInput-full-width">
           <textarea matInput
@@ -16,8 +16,8 @@
                     matTextareaAutosize
                     matAutosizeMinRows="1"
                     matAutosizeMaxRows="5"
-                    [(ngModel)]="targetValue"></textarea>
-          <button mat-button *ngIf="targetValue" matSuffix mat-icon-button aria-label="Clear" (click)="targetValue=''">
+                    [(ngModel)]="transInfo.target"></textarea>
+          <button mat-button *ngIf="transInfo.target" matSuffix mat-icon-button aria-label="Clear" (click)="transInfo.target=''">
               <mat-icon>close</mat-icon>
             </button>
       </mat-form-field>
