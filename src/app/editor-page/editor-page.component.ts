@@ -13,7 +13,8 @@ export class EditorPageComponent implements OnInit {
     meaning: '',
     description: '',
     source: '',
-    target: ''
+    target: '',
+    version: '1.0'
   };
   targetValue = '';
   constructor() { }

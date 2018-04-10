@@ -24,6 +24,7 @@ export class TranslatorPageComponent implements OnInit {
   listItems: any[] = [];   // 指定的json格式数据
   dataSource: MatTableDataSource<any>; // listview数据数组
   editorPageData: TranslationUnit;
+  version = '';
   constructor(private route: Router,
               private fileService: FileOperatorService) { }
 
@@ -34,7 +35,8 @@ export class TranslatorPageComponent implements OnInit {
       meaning: '',
       description: '',
       source: '',
-      target: ''
+      target: '',
+      version: ''
     };
   }
 
@@ -46,6 +48,7 @@ export class TranslatorPageComponent implements OnInit {
                 .subscribe( (res) => {
                     console.log(res);
                     // 获取翻译单元数据
+                    this.version = res.xliff.$.version;
                     this.transUnits = this.fileService.getTransUnits(res);
                     this.listItems = this.dataFormat(this.transUnits);
                     this.dataSource = new MatTableDataSource(this.listItems);
@@ -90,7 +93,8 @@ export class TranslatorPageComponent implements OnInit {
       meaning: this.listItems[index].meaning,
       description: this.listItems[index].description,
       source: this.listItems[index].source,
-      target: this.listItems[index].target
+      target: this.listItems[index].target,
+      version: this.version
     };
     this.editorPageData = data;
     // TODO: 找到指定id数据，然后通过output或者subject发送到editor界面，订阅的方式

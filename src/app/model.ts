@@ -5,6 +5,7 @@ export interface TranslationUnit {
     description: string;
     source: string;
     target: string;
+    version: string;
 }
 
 export class FileInfo {
