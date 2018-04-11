@@ -7,6 +7,7 @@ import { FileInfo } from './../model';
 import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/of';
 
 import xml2js from 'xml2js';
 const fs = (window as any).require('fs');
@@ -125,5 +126,17 @@ export class FileOperatorService {
 
   getFileName(): string {
     return this.fileInfo.fileName;
+  }
+
+  getFilePath(): string {
+    return this.fileInfo.path;
+  }
+  writeFile(filePath: string, jsonData: {}): Observable<boolean> {
+    try {
+      fs.writeFileSync(filePath, this.jsonToXml(jsonData));
+      return Observable.of(true);
+    } catch (e) {
+      console.log(' write file faild.');
+    }
   }
 }

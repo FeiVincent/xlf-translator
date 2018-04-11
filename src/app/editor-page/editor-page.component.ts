@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { TranslationUnit } from '../model';
 @Component({
   selector: 'app-editor-page',
@@ -16,6 +16,7 @@ export class EditorPageComponent implements OnInit {
     target: '',
     version: '1.0'
   };
+  @Output() saveTarget = new EventEmitter<{index: number, target: string}>();
   targetValue = '';
   constructor() { }
 
@@ -24,6 +25,6 @@ export class EditorPageComponent implements OnInit {
 
   save(): void {
     // TODO: 补充未输入功能
-    this.transInfo.target  = this.targetValue;
+    this.saveTarget.emit({index: this.transInfo.index , target: this.transInfo.target});
   }
 }
