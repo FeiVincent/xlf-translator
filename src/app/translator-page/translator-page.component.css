@@ -27,7 +27,7 @@
   .mat-table {
     overflow: auto;
     /* min-height: 600px; */
-    max-height: 800px;
+    max-height: 780px;
   }
 .list-label {
   font-size: 16px;
