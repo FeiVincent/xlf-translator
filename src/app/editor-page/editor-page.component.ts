@@ -8,7 +8,7 @@ import { TranslationUnit } from '../model';
 export class EditorPageComponent implements OnInit {
 
   @Input() transInfo: TranslationUnit = {
-    index: 0,
+    index: null,
     id: '',
     meaning: '',
     description: '',

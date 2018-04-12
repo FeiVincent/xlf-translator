@@ -4,13 +4,13 @@
 <button class="sourceFile-btn"
             mat-raised-button
             color="primary"
-            (click)="showOpenDialog()" >Open Source File</button>
-<p class="file-lbl1" >{{sourceFile}}</p>
+            (click)="showOpenDialog(btnType.sourceBtn)" >Open Source File</button>
+<p class="file-lbl1" >{{sourceFileName}}</p>
 <button class="destFile-btn"
             mat-raised-button
             color="primary"
-            (click)="showOpenDialog()" >Open Dest File</button>
-<p class="file-lbl2" >{{destFile}}</p>
+            (click)="showOpenDialog(btnType.destBtn)" >Open Dest File</button>
+<p class="file-lbl2" >{{destFileName}}</p>
 </div>
 <div class="section button" mat-dialog-actions>
     <button class="backMenu-btn"

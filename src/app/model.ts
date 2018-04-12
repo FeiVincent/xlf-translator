@@ -11,6 +11,6 @@ export interface TranslationUnit {
 export class FileInfo {
     path: string;
     fileName: string;
-    xmlData: string;
+    jsonData: any;
 }
 

@@ -18,7 +18,11 @@ export class FileOperatorService {
 
   fileInfo = new FileInfo();
   constructor(private electronService: ElectronService,
-              private zone: NgZone) { }
+              private zone: NgZone) {
+    this.fileInfo.fileName = null;
+    this.fileInfo.path = null;
+    this.fileInfo.jsonData = null;
+  }
 
   /**
    * 选择文件的窗口，选择完成之后获取xlf文件路径
@@ -49,6 +53,15 @@ export class FileOperatorService {
     return result;
   }
 
+  setFileInfo(filePath: string, jsonData: any): void {
+    if (null === filePath || '' === filePath) {
+      console.log('Merge file faild');
+      return;
+    }
+    this.fileInfo.path = filePath;
+    this.fileInfo.fileName = path.basename(filePath);
+    this.fileInfo.jsonData = jsonData;
+  }
   /**
    * 读取文件内容,返回json对象
    * @param filePath 文件路径
@@ -66,9 +79,8 @@ export class FileOperatorService {
     // 基于node.js的路径转换文件名函数
     this.fileInfo.fileName = path.basename(filePath);
     this.fileInfo.path = filePath;
-    this.fileInfo.xmlData = data;
 
-    return Observable.fromPromise(this.xmlToJson(this.fileInfo.xmlData))
+    return Observable.fromPromise(this.xmlToJson(data))
                      .catch((error) => {
                        console.log('failed to parse file.');
                        return Observable.throw('failed to parse file.');
@@ -89,6 +101,7 @@ export class FileOperatorService {
           return reject(err);
         }
         // jsonData = data;
+        this.fileInfo.jsonData = data;
         resolve(data);
       });
     });
@@ -131,6 +144,14 @@ export class FileOperatorService {
   getFilePath(): string {
     return this.fileInfo.path;
   }
+
+  getJsonData(): any {
+    return this.fileInfo.jsonData;
+  }
+
+  getVersion(): string {
+    return this.fileInfo.jsonData.xliff.$.version;
+  }
   writeFile(filePath: string, jsonData: {}): Observable<boolean> {
     try {
       fs.writeFileSync(filePath, this.jsonToXml(jsonData));
@@ -138,5 +159,11 @@ export class FileOperatorService {
     } catch (e) {
       console.log(' write file faild.');
     }
+  }
+
+  clear(): void {
+    this.fileInfo.fileName = '';
+    this.fileInfo.path = '';
+    this.fileInfo.jsonData = null;
   }
 }

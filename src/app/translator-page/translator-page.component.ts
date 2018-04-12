@@ -2,9 +2,11 @@ import { Observable } from 'rxjs/Observable';
 import { FileOperatorService } from './../core/file-operator.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {MatTableDataSource} from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { TranslationUnit } from './../model';
 import { MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material';
+import { AlertComponent } from './alert/alert.component';
 
 @Component({
   selector: 'app-translator-page',
@@ -27,9 +29,12 @@ export class TranslatorPageComponent implements OnInit {
   editorPageData: TranslationUnit;
   version = '';
   dataStore: any = null;
+  isModified = false; // 文件内容是否被修改，用来当用户没有保存退出的时候判断是否需要保存
   constructor(private route: Router,
               private fileService: FileOperatorService,
-              private snackBar: MatSnackBar) { }
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog) {
+  }
 
   ngOnInit() {
     this.editorPageData = {
@@ -41,6 +46,15 @@ export class TranslatorPageComponent implements OnInit {
       target: '',
       version: ''
     };
+
+    this.dataStore = this.fileService.getJsonData(); // 获取json数据
+    if (null !== this.dataStore) {
+      this.version = this.fileService.getVersion();
+      this.transUnits = this.fileService.getTransUnits(this.dataStore);
+      this.listItems = this.dataFormat(this.transUnits);
+      this.filename = this.fileService.getFileName();
+      this.refreshList();
+    }
   }
 
   showOpenDialog(): void {
@@ -73,7 +87,12 @@ export class TranslatorPageComponent implements OnInit {
   }
 
   saveFile(): void {
-    if ( null === this.dataStore) {
+    if ( null === this.dataStore || false === this.isModified) {
+      this.snackBar.open('No file or content is not modified !',
+      'Faild',
+      {
+        duration: 1000
+      });
       return;
     }
     const filePath = this.fileService.getFilePath();
@@ -91,6 +110,14 @@ export class TranslatorPageComponent implements OnInit {
 
   updateTarget(translation: {index: number, target: string}): void {
 
+    if (null === this.dataStore || null === translation.index) {
+      this.snackBar.open('No translation unit!',
+      'Faild',
+      {
+        duration: 1000
+      });
+      return;
+    }
     if ( undefined === this.transUnits[translation.index]['target']) {
       this.dataStore.xliff
                   .file[0]
@@ -122,6 +149,7 @@ export class TranslatorPageComponent implements OnInit {
       }
       this.refreshList();
     }
+    this.isModified = true;
     this.snackBar.open('Save',
             'Successful',
             {
@@ -172,11 +200,34 @@ export class TranslatorPageComponent implements OnInit {
     // TODO: 找到指定id数据，然后通过output或者subject发送到editor界面，订阅的方式
   }
   back(): void {
-    this.route.navigate(['home']);
+    if ( false === this.isModified ) { // 如果当前没有任何更改
+      this.fileService.clear();
+      this.route.navigate(['home']);
+    } else {
+      const dialogRef = this.dialog.open(AlertComponent, {
+        width: '250px',
+        disableClose: true
+      });
+      dialogRef.afterClosed().subscribe( (result) => {
+        console.log(result);
+        if (true === result) { // 如果用户点击了save按钮
+          this.saveFile();
+          this.fileService.clear();
+          this.route.navigate(['home']);
+        } else if ( false === result ) { // 如果用户点击了继续退出按钮
+          this.fileService.clear();
+          this.route.navigate(['home']);
+        } else {
+          return;
+        }
+      });
+    }
   }
 
   private refreshList(): void {
-    this.dataSource = new MatTableDataSource(this.listItems);
+    if (null !== this.listItems) {
+      this.dataSource = new MatTableDataSource(this.listItems);
+    }
   }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
