@@ -26,7 +26,6 @@
   
   .mat-table {
     overflow: auto;
-    height: 560px;
     /* min-height: 600px; */
     max-height: 800px;
   }
