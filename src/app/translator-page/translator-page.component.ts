@@ -97,6 +97,7 @@ export class TranslatorPageComponent implements OnInit {
     this.fileService.writeFile(filePath, this.dataStore)
         .subscribe((res) => {
           if (res) {
+            this.isModified = false;
             this.openMessageBox('Save file',
             'Successful',
             {

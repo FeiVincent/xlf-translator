@@ -14,7 +14,7 @@
     "electron-aot": "ng build --prod && electron .",
     "package:osx": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=darwin --arch=x64 --ignore=/e2e --ignore=/node_modules --ignore=/src --out=packages",
     "package:windows": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=win32 --arch=x64 --ignore=/e2e --ignore=/node_modules --ignore=/src --out=packages",
-    "package:linux": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=linux --arch=x64 --ignore=/e2e --ignore=/node_modules --ignore=/src --out=packages"
+    "package:linux": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=linux --arch=x64 --ignore=/e2e --ignore=/.vscode --ignore=/node_modules --ignore=/src --out=packages"
   },
   "private": true,
   "dependencies": {
@@ -65,7 +65,7 @@
   },
   "build": {
         "appId": "abcd1234",
-        "linux": {
+        "win": {
             "category": "your app category"
         }
     }
