@@ -12,9 +12,9 @@
     "e2e": "ng e2e",
     "electron": "ng build && electron .",
     "electron-aot": "ng build --prod && electron .",
-    "package:osx": "electron-packager ./dist --platform=darwin --out=packages && cd packages && zip -9 -r omnixlf-${npm_package_version}-darwin.zip OmniXLF-darwin-x64",
-    "package:windows": "electron-packager ./dist --platform=win32 --arch=ia32 --out=packages && cd packages && zip -9 -r omnixlf-${npm_package_version}-win32.zip ./OmniXLF-win32-ia32",
-    "package:linux": "electron-packager ./dist --platform=linux --arch=x64 --out=packages && cd packages && tar -czf omnixlf-${npm_package_version}-linux-x64.tar.gz ./OmniXLF-linux-x64"
+    "package:osx": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=darwin --arch=x64 --ignore=/e2e --ignore=/node_modules --ignore=/src --out=packages",
+    "package:windows": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=win32 --arch=x64 --ignore=/e2e --ignore=/node_modules --ignore=/src --out=packages",
+    "package:linux": "ng build --prod && electron-packager . xlfTranslator --version 1.0 --no-prune --platform=linux --arch=x64 --ignore=/e2e --ignore=/node_modules --ignore=/src --out=packages"
   },
   "private": true,
   "dependencies": {
@@ -49,6 +49,7 @@
     "@types/node": "~6.0.60",
     "codelyzer": "^4.0.1",
     "electron": "^1.8.4",
+    "electron-packager": "^12.0.1",
     "electron-reload": "^1.2.2",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -61,5 +62,12 @@
     "ts-node": "~4.1.0",
     "tslint": "~5.9.1",
     "typescript": "~2.5.3"
-  }
+  },
+  "build": {
+        "appId": "abcd1234",
+        "linux": {
+            "category": "your app category"
+        }
+    }
+  
 }

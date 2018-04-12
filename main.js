@@ -14,7 +14,7 @@ function createWindow () {
       defaultFontSize: 16,
       minWidth: 1200,
       minHeight: 800,
-    icon: `file://${__dirname}/dist/assets/icon.ico`,
+    icon: `file://${__dirname}/resources/app/dist/assets/icon.ico`,
     defaultMonospaceFontSize: 16,
     defaultEncoding: "utf-8",
     webPreferences: {
