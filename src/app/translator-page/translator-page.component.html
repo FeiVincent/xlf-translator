@@ -19,6 +19,10 @@
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
+    <p class="list-label">Counts: {{counts}}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+       Done: {{doneItemCount}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+       Todo: {{noTransItemsCount}}
+    </p>
   </div>
   <mat-table #table [dataSource]="dataSource">
 

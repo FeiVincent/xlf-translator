@@ -21,8 +21,8 @@ function createWindow () {
         plugins: true
       }
     });
-  const menu = Menu.buildFromTemplate(createMenuTemplate(win.webContents));
-  Menu.setApplicationMenu(menu);
+  // const menu = Menu.buildFromTemplate(createMenuTemplate(win.webContents));
+  Menu.setApplicationMenu(null);
 
   // load the dist folder from Angular
   // 然后加载应用的 index.html。
@@ -33,7 +33,7 @@ function createWindow () {
   }));
 
   // 打开开发者工具。
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
 
   // 当 window 被关闭，这个事件会被触发。
   win.on('closed', () => {
@@ -85,28 +85,6 @@ function createMenuTemplate( window ) {
           ]
         }
       ];
-    
-      if (process.platform === 'darwin') {
-        template.unshift({
-          label: app.getName(),
-          submenu: [
-            {
-              label: 'About OmniXLF',
-              click: () => {
-                window.send('about', {});
-              }
-            },
-            { type: 'separator' },
-            { role: 'services', submenu: [] },
-            { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideothers' },
-            { role: 'unhide' },
-            { type: 'separator' },
-            { role: 'quit' }
-          ]
-        })
-      };
       return template;
   };
 

@@ -24,7 +24,9 @@ export class EditorPageComponent implements OnInit {
   }
 
   save(): void {
-    // TODO: 补充未输入功能
+    if ('' === this.transInfo.id) {
+      return;
+    }
     this.saveTarget.emit({index: this.transInfo.index , target: this.transInfo.target});
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 @Component({
@@ -6,13 +6,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent {
 
   constructor() {}
-
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-  }
 }

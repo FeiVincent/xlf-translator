@@ -17,7 +17,7 @@ export class TranslatorPageComponent implements OnInit {
 
   filename = '';
 
-  counts = 100;
+  counts = 0;
   noTransItemsCount = 0;
   doneItemCount = 0;
 
@@ -72,9 +72,7 @@ export class TranslatorPageComponent implements OnInit {
                       this.filename = this.fileService.getFileName();
                       this.refreshList();
                     } else {
-                      this.snackBar.open('File is empty!',
-                      'Faild',
-                      {
+                      this.openMessageBox('File is empty!', 'Faild', {
                         duration: 1000
                       });
                     }
@@ -88,18 +86,18 @@ export class TranslatorPageComponent implements OnInit {
 
   saveFile(): void {
     if ( null === this.dataStore || false === this.isModified) {
-      this.snackBar.open('No file or content is not modified !',
-      'Faild',
-      {
-        duration: 1000
-      });
+      this.openMessageBox('No file or content is not modified !',
+          'Faild',
+          {
+            duration: 1000
+          });
       return;
     }
     const filePath = this.fileService.getFilePath();
     this.fileService.writeFile(filePath, this.dataStore)
         .subscribe((res) => {
           if (res) {
-            this.snackBar.open('Save file',
+            this.openMessageBox('Save file',
             'Successful',
             {
               duration: 1000
@@ -109,13 +107,12 @@ export class TranslatorPageComponent implements OnInit {
   }
 
   updateTarget(translation: {index: number, target: string}): void {
-
     if (null === this.dataStore || null === translation.index) {
-      this.snackBar.open('No translation unit!',
-      'Faild',
-      {
-        duration: 1000
-      });
+      this.openMessageBox('No translation unit!',
+          'Faild',
+          {
+            duration: 1000
+          });
       return;
     }
     if ( undefined === this.transUnits[translation.index]['target']) {
@@ -128,12 +125,29 @@ export class TranslatorPageComponent implements OnInit {
       this.transUnits = this.fileService.getTransUnits(this.dataStore);
       // 更新list列表的数据
       if ( '' === translation.target) {
+        // 如果原来翻译好的
+        if (true === this.listItems[translation.index].done) {
+          this.noTransItemsCount++;
+          this.doneItemCount = this.counts - this.noTransItemsCount;
+        }
         this.listItems[translation.index].done = false;
       } else {
-        this.listItems[translation.index].done = true;
+        // 如果原来就是没有翻译好的
+        if (false === this.listItems[translation.index].done) {
+          this.noTransItemsCount--;
+          this.doneItemCount = this.counts - this.noTransItemsCount;
+          this.listItems[translation.index].done = true;
+        }
       }
+      // 原本没有这个属性，创建一个json的属性并赋值
       this.listItems[translation.index].target = translation.target;
+      this.isModified = true; // 标记文件已经修改
       this.refreshList();
+      this.openMessageBox('Save',
+          'Successful',
+          {
+            duration: 1000
+          });
     } else {
       this.dataStore.xliff
           .file[0]
@@ -141,20 +155,34 @@ export class TranslatorPageComponent implements OnInit {
           [translation.index]
           .target[0] = translation.target;
       this.transUnits = this.fileService.getTransUnits(this.dataStore);
+      // 判断传入进来的和列表中的翻译是否一样
+      if (this.listItems[translation.index].target === translation.target) {
+        return;
+      }
       this.listItems[translation.index].target = translation.target;
       if ( '' === translation.target) {
+        // 如果原来翻译好的
+        if (true === this.listItems[translation.index].done) {
+          this.noTransItemsCount++;
+          this.doneItemCount = this.counts - this.noTransItemsCount;
+        }
         this.listItems[translation.index].done = false;
       } else {
-        this.listItems[translation.index].done = true;
+        // 如果原来就是没有翻译好的
+        if (false === this.listItems[translation.index].done) {
+          this.noTransItemsCount--;
+          this.doneItemCount = this.counts - this.noTransItemsCount;
+          this.listItems[translation.index].done = true;
+        }
       }
       this.refreshList();
+      this.isModified = true; // 标记文件已经修改
+      this.openMessageBox('Save',
+          'Successful',
+          {
+            duration: 1000
+          });
     }
-    this.isModified = true;
-    this.snackBar.open('Save',
-            'Successful',
-            {
-              duration: 1000
-            });
   }
   private dataFormat(data: any[]) {
     const items: any[] = [];
@@ -184,6 +212,7 @@ export class TranslatorPageComponent implements OnInit {
         done: done
       });
     }
+    this.doneItemCount = this.counts - this.noTransItemsCount;
     return items;
   }
   editeWord(index: number): void {
@@ -209,7 +238,6 @@ export class TranslatorPageComponent implements OnInit {
         disableClose: true
       });
       dialogRef.afterClosed().subscribe( (result) => {
-        console.log(result);
         if (true === result) { // 如果用户点击了save按钮
           this.saveFile();
           this.fileService.clear();
@@ -233,5 +261,13 @@ export class TranslatorPageComponent implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  openMessageBox(message: string, action: string, option: any): void {
+    this.snackBar.open(message,
+      action,
+    {
+      duration: 1000
+    });
   }
 }

@@ -30,3 +30,6 @@
     /* min-height: 600px; */
     max-height: 800px;
   }
+.list-label {
+  font-size: 16px;
+}

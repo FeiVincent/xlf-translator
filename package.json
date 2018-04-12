@@ -11,7 +11,10 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "ng build && electron .",
-    "electron-aot": "ng build --prod && electron ."
+    "electron-aot": "ng build --prod && electron .",
+    "package:osx": "electron-packager ./dist --platform=darwin --out=packages && cd packages && zip -9 -r omnixlf-${npm_package_version}-darwin.zip OmniXLF-darwin-x64",
+    "package:windows": "electron-packager ./dist --platform=win32 --arch=ia32 --out=packages && cd packages && zip -9 -r omnixlf-${npm_package_version}-win32.zip ./OmniXLF-win32-ia32",
+    "package:linux": "electron-packager ./dist --platform=linux --arch=x64 --out=packages && cd packages && tar -czf omnixlf-${npm_package_version}-linux-x64.tar.gz ./OmniXLF-linux-x64"
   },
   "private": true,
   "dependencies": {
