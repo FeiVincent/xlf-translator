@@ -195,6 +195,7 @@ export class TranslatorPageComponent implements OnInit {
     for ( let i = 0; i < this.counts; ++i) {
       if (undefined === data[i]['target']) {
         done = false;
+        target = '';
         this.noTransItemsCount++;
       } else {
         if ( null === data[i].target[0] || '' === data[i].target[0]) {

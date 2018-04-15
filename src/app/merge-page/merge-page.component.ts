@@ -39,7 +39,6 @@ export class MergePageComponent implements OnInit {
               .subscribe((fileDate) => {
               if (null !== fileDate) {
                 this.sourceFileStore = fileDate;
-                console.log(this.sourceFileStore);
                 this.sourceFileName = this.fileService.getFileName();
                 this.sourcePath = this.fileService.getFilePath();
                 this.btnEnable.destBtn = true;
@@ -107,6 +106,5 @@ export class MergePageComponent implements OnInit {
 
   private mergeXlfFiles(): void {
     this.sourceFileStore =  this.fileService.merageJsonData(this.sourceFileStore, this.destFileStore);
-    console.log(this.sourceFileStore);
   }
 }
