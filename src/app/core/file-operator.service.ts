@@ -166,4 +166,27 @@ export class FileOperatorService {
     this.fileInfo.path = '';
     this.fileInfo.jsonData = null;
   }
+
+  merageJsonData(sourceData: any, destData: any): any {
+    const sourceTransUnits = this.getTransUnits(sourceData); // 获取源文件的翻译单元
+    const destTransUnits = this.getTransUnits(destData);
+    const sourceLength = sourceTransUnits.length;
+    const destLength = destTransUnits.length;
+    const newTransUnits = [];
+    let sourceId = '';
+    let destId = '';
+    let target = [];
+    for ( let i = 0; i < sourceLength; ++i) {
+      sourceId = sourceTransUnits[i].$.id;
+      for (let j = 0; j < destLength; ++j) {
+        destId = destTransUnits[j].$.id;
+        if (sourceId === destId) { // 如果在dest中找到source的id,说明源文件的翻译内容是保留的
+          target = sourceTransUnits[i].target;
+          destTransUnits[j].target = target;
+        }
+      }
+    }
+    destData.xliff.file[0].body[0]['trans-unit'] = destTransUnits;
+    return destData;
+  }
 }

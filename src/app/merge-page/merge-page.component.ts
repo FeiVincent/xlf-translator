@@ -39,6 +39,7 @@ export class MergePageComponent implements OnInit {
               .subscribe((fileDate) => {
               if (null !== fileDate) {
                 this.sourceFileStore = fileDate;
+                console.log(this.sourceFileStore);
                 this.sourceFileName = this.fileService.getFileName();
                 this.sourcePath = this.fileService.getFilePath();
                 this.btnEnable.destBtn = true;
@@ -59,11 +60,11 @@ export class MergePageComponent implements OnInit {
             this.fileService.readFile(filePath)
                 .subscribe((fileDate) => {
                   if (null !== fileDate) {
-                    this.destFileStore = fileDate;
                     if (this.sourcePath === this.fileService.getFilePath()) {
                       this.destFileName = 'The file is the same!';
                       return;
                     }
+                    this.destFileStore = fileDate;
                     this.destFileName = this.fileService.getFileName();
                     this.btnEnable.mergeBtn = true;
                   } else {
@@ -84,7 +85,8 @@ export class MergePageComponent implements OnInit {
       return;
     }
     this.isLoading = true;
-    this.fileService.writeFile(this.sourcePath, this.mergeXlfFiles())
+    this.mergeXlfFiles();
+    this.fileService.writeFile(this.sourcePath, this.sourceFileStore)
         .subscribe((newJsonData) => {
            this.isLoading = false; // 关闭进度条
            this.dialogRef.close(); // 关闭dialog
@@ -103,7 +105,8 @@ export class MergePageComponent implements OnInit {
     this.dialogRef.close(); // 关闭dialog对话框
   }
 
-  private mergeXlfFiles(): any {
-    return Object.assign({}, this.sourceFileStore, this.destFileStore);
+  private mergeXlfFiles(): void {
+    this.sourceFileStore =  this.fileService.merageJsonData(this.sourceFileStore, this.destFileStore);
+    console.log(this.sourceFileStore);
   }
 }

@@ -190,6 +190,8 @@ export class TranslatorPageComponent implements OnInit {
     this.counts = data.length;
     let done = false;
     let target = '';
+    let meaning = '';
+    let description = '';
     for ( let i = 0; i < this.counts; ++i) {
       if (undefined === data[i]['target']) {
         done = false;
@@ -203,11 +205,18 @@ export class TranslatorPageComponent implements OnInit {
           target = data[i].target[0];
         }
       }
+      if ( undefined === data[i]['note'] ) {
+        meaning = '';
+        description = '';
+      } else {
+        meaning = data[i].note[1]._;
+        description = data[i].note[0]._;
+      }
       items.push({
         index: i,
         id: data[i].$.id,
-        meaning: '',
-        description: '',
+        meaning: meaning,
+        description: description,
         source: data[i].source[0],
         target: target,
         done: done
